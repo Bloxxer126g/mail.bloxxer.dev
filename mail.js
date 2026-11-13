@@ -1,14 +1,74 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const sessionToken = localStorage.getItem('sessionToken')
-  
-  if (sessionToken) {
-    document.getElementById('Email').style.display = 'flex'
-    document.getElementById('LoginPopup').style.display = 'none'
-  } else {
-    document.getElementById('Email').style.display = 'none'
-    document.getElementById('LoginPopup').style.display = 'flex'
+const composeBox = document.getElementById('Email')
+const loginPopup = document.getElementById('LoginPopup')
+const inboxPanel = document.getElementById('InboxPanel')
+const inboxList = document.getElementById('InboxList')
+const inboxViewer = document.getElementById('InboxViewer')
+
+function showLogin() {
+  composeBox.style.display = 'none'
+  inboxPanel.style.display = 'none'
+  loginPopup.style.display = 'flex'
+}
+
+function showCompose() {
+  loginPopup.style.display = 'none'
+  inboxPanel.style.display = 'none'
+  composeBox.style.display = 'flex'
+}
+
+function showInbox() {
+  loginPopup.style.display = 'none'
+  composeBox.style.display = 'none'
+  inboxPanel.style.display = 'flex'
+  loadInbox()
+}
+
+async function loadInbox() {
+  inboxViewer.replaceChildren()
+  inboxList.textContent = 'Loading...'
+  try {
+    const res = await fetch('/api/get-inbox', {
+      headers: { Authorization: `Bearer ${localStorage.getItem('sessionToken')}` }
+    })
+    if (res.status === 401) {
+      localStorage.clear()
+      showLogin()
+      return
+    }
+    const { emails, error } = await res.json()
+    if (error) { inboxList.textContent = error; return }
+    if (!emails.length) { inboxList.textContent = 'No mail yet.'; return }
+
+    inboxList.replaceChildren()
+    for (const m of emails) {
+      const row = document.createElement('div')
+      row.className = 'InboxRow'
+      row.textContent = `${m.from_email} — ${m.subject || '(no subject)'}`
+      row.onclick = () => showEmail(m)
+      inboxList.appendChild(row)
+    }
+  } catch (e) {
+    inboxList.textContent = 'Error: ' + e.message
   }
+}
+
+function showEmail(m) {
+  const frame = document.createElement('iframe')
+  frame.sandbox = ''
+  frame.style.width = '100%'
+  frame.style.height = '400px'
+  frame.srcdoc = m.html || `<pre>${(m.text || '').replace(/</g, '&lt;')}</pre>`
+  inboxViewer.replaceChildren(frame)
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('sessionToken')) showCompose()
+  else showLogin()
 })
+
+document.getElementById('ComposeTab').addEventListener('click', showCompose)
+document.getElementById('InboxTab').addEventListener('click', showInbox)
+document.getElementById('RefreshInbox').addEventListener('click', loadInbox)
 
 document.getElementById('LoginButton').addEventListener('click', async () => {
   const email = document.getElementById('EmailHeader').value
@@ -34,8 +94,7 @@ document.getElementById('LoginButton').addEventListener('click', async () => {
         body: JSON.stringify({ userId: result.user.id })
       }).then(r => r.json())
       localStorage.setItem('fromEmail', userProfile.newemail)
-      document.getElementById('LoginPopup').style.display = 'none'
-      document.getElementById('Email').style.display = 'flex'
+      showCompose()
     } else {
       alert('Login failed: ' + (result.error || 'Unknown error'))
     }
