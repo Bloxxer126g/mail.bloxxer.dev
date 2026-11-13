@@ -11,9 +11,15 @@
     <title>Mail - Bloxxer.Dev</title>
 </head>
 <body>
-     
+
     <div class="Topbar">Mail.Bloxxer.Dev</div>
+
+    <!-- Compose -->
     <div class="Email" id="Email">
+        <div>
+            <button id="ComposeTab">Compose</button>
+            <button id="InboxTab">Inbox</button>
+        </div>
         <div class="AreaHeaders">
             <div class="Header">
                 <input id="ToHeader" class="HeaderContent" type="text" placeholder="To">
@@ -25,6 +31,19 @@
         <textarea id="MessageBody" class="MessageBody" placeholder="Start typing..."></textarea>
         <button id="SendButton">Send!</button>
     </div>
+
+    <!-- Inbox -->
+    <div class="Email" id="InboxPanel" style="display:none">
+        <div>
+            <button id="ComposeTab2">Compose</button>
+            <button id="InboxTab2">Inbox</button>
+            <button id="RefreshInbox">Refresh</button>
+        </div>
+        <div id="InboxList"></div>
+        <div id="InboxViewer"></div>
+    </div>
+
+    <!-- Login / Sign up -->
     <div class="Email" id="LoginPopup">
         Log in to send emails.
         <p></p>

@@ -68,6 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.getElementById('ComposeTab').addEventListener('click', showCompose)
 document.getElementById('InboxTab').addEventListener('click', showInbox)
+document.getElementById('ComposeTab2').addEventListener('click', showCompose)
+document.getElementById('InboxTab2').addEventListener('click', showInbox)
 document.getElementById('RefreshInbox').addEventListener('click', loadInbox)
 
 document.getElementById('LoginButton').addEventListener('click', async () => {

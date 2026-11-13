@@ -136,3 +136,6 @@ div {
     color: var(--fonts-vague);
     font-size: var(--fontsize);
 }
+
+.InboxRow { padding: 8px; cursor: pointer; border-bottom: 1px solid #ccc; }
+.InboxRow:hover { background: rgba(0,0,0,0.05); }
