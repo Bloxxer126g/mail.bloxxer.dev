@@ -5,7 +5,7 @@
     --panel: #8aa2dc;
     --panel-light: #a5b8e2;
     --mint: #d0fcc0;
-    --mint-hover: #bff5ab;
+    --mint-hover: #e0ffd4;
     --ink: #0d1530;
     --ink-soft: #2a3558;
 }
@@ -83,6 +83,7 @@ body {
     border-radius: 999px;
     padding: 6px 18px;
     cursor: pointer;
+    transition: 0.3s ease-in-out;
 }
  
 .Pill:hover { background: var(--panel-light); }
@@ -130,8 +131,7 @@ body {
     outline: none;
     border-color: var(--ink);
 }
- 
-/* Mint action buttons (like the Launch buttons on the main site) */
+
 .Launch,
 #SendButton,
 #LoginButton,
@@ -144,6 +144,7 @@ body {
     border-radius: 999px;
     padding: 10px 18px;
     cursor: pointer;
+    transition: 0.3s ease-in-out;
 }
  
 .Launch:hover { background: var(--mint-hover); }
@@ -185,3 +186,16 @@ body {
     .Topbar { font-size: 20px; }
 }
  
+
+/* animations :O */
+.Pill:hover {
+    scale: 1.05;
+}
+
+.Launch:hover,
+#SendButton:hover,
+#LoginButton:hover,
+#SignupButton:hover {
+    scale: 1.01;
+    background-color: var(--mint-hover);
+}
